@@ -4,6 +4,7 @@ Lists all NuGet packages installed across projects within the given solution.
 
 import os
 import argparse
+import concurrent.futures
 import xml.etree.ElementTree as ET
 
 
@@ -19,7 +20,13 @@ def parse_csproj_file(csproj_file: str) -> list[dict[str, str]]:
     for package_reference in root.findall(".//PackageReference"):
         package_name = package_reference.attrib["Include"]
         package_version = package_reference.attrib["Version"]
-        packages.append({"name": package_name, "version": package_version})
+        packages.append(
+            {
+                "file": os.path.basename(csproj_file),
+                "name": package_name,
+                "version": package_version,
+            }
+        )
 
     return packages
 
@@ -38,11 +45,12 @@ def list_packages(args: argparse.Namespace) -> None:
         if file == os.path.basename(root) + ".csproj"
     ]
 
-    packages = []
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = [
+            executor.submit(parse_csproj_file, csproj_file)
+            for csproj_file in csproj_files
+        ]
 
-    for csproj_file in csproj_files:
-        proj_name = os.path.basename(csproj_file)
-        packages = parse_csproj_file(csproj_file)
-
-        for package in packages:
-            print(f"{proj_name}: {package['name']} ({package['version']})")
+        for future in concurrent.futures.as_completed(results):
+            for package in future.result():
+                print(f"{package['file']}: {package['name']} ({package['version']})")
