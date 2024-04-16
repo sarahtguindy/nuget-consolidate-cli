@@ -4,7 +4,7 @@ Command-line tool to consolidate NuGet packages across projects in a solution.
 
 import argparse
 
-from commands import list
+from commands import nuget_list_packages
 
 
 def main() -> None:
@@ -23,7 +23,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "list-packages":
-        list.list_packages(args)
+        nuget_list_packages.list_packages(args)
     else:
         parser.print_help()
 
