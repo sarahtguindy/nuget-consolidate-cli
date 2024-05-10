@@ -3,6 +3,7 @@ Displays all NuGet packages across projects within a solution that have incongru
 """
 
 import os
+import sys
 import argparse
 import concurrent.futures
 import xml.etree.ElementTree as ET
@@ -56,6 +57,8 @@ def list_packages(args: argparse.Namespace) -> None:
                 else:
                     all_packages[package_name] = package_info
 
+    match_found = False
+
     # Filter and print consolidated package information
     for package_name, package_info in all_packages.items():
         if (
@@ -65,3 +68,11 @@ def list_packages(args: argparse.Namespace) -> None:
             print(f"\n{package_name}:")
             for project, version in package_info:
                 print(f"{project} ({version})")
+
+            match_found = True
+
+    if not match_found:
+        print(f"No packages to consolidate were found in '{args.solution}'.")
+        sys.exit(1)
+
+    sys.exit(0)
