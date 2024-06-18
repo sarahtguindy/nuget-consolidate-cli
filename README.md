@@ -6,6 +6,17 @@ A major pain point when working with IDEs outside of Visual Studio is that there
 
 Requires the .NET CLI to be installed (comes installed with .NET Core 3.1 SDK and later versions).
 
+## Installation
+
+### Option 1: Download the Executable Directly
+- [Windows](https://github.com/sarahtguindy/nuget-consolidate-cli/releases/download/v1.0.0/nuget-consolidate.exe)
+- [macOS]() **(coming soon)**
+
+### Option 2: Download and Run the Installation Script
+
+- **Windows:** [install.bat](https://github.com/sarahtguindy/nuget-consolidate-cli/releases/download/v1.0.0/install.bat)
+- **macOS:** [install.sh]() **(coming soon)**
+
 ## Usage
 
 Below are a list of the available commands and options.
